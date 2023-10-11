@@ -6,7 +6,3 @@ import Config
 # and secrets from environment variables or elsewhere. Do not define
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
-
-if base_url = System.get_env("DOCKER_ENGINE_API_BASE_URI") do
-  config :docker_engine_api, base_url: base_url
-end
