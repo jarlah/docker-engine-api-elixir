@@ -48,7 +48,7 @@ defmodule DockerEngineAPI.Connection do
   """
   @spec new() :: Tesla.Env.client()
   def new do
-    Tesla.client(middleware(), adapter())
+    Tesla.client(middleware(), Tesla.Adapter.Hackney)
   end
 
   @doc """
@@ -67,7 +67,7 @@ defmodule DockerEngineAPI.Connection do
   def new(options) when is_list(options) do
     options
     |> middleware()
-    |> Tesla.client(adapter())
+    |> Tesla.client(Tesla.Adapter.Hackney)
   end
 
 
@@ -108,15 +108,5 @@ defmodule DockerEngineAPI.Connection do
       {Tesla.Middleware.EncodeJson, engine: json_engine}
       | middleware
     ]
-  end
-
-
-  @doc """
-  Returns the default adapter for this API.
-  """
-  def adapter do
-    :tesla
-    |> Application.get_env(__MODULE__, [])
-    |> Keyword.get(:adapter, nil)
   end
 end
