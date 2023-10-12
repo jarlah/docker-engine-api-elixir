@@ -4,25 +4,12 @@
 defmodule DockerEngineAPI.Connection do
   @moduledoc """
   Handle Tesla connections for DockerEngineAPI.
-
-  Additional middleware can be set in the compile-time or runtime configuration:
-
-      config :tesla, DockerEngineAPI.Connection,
-        base_url: "http://localhost/v1.43",
-        adapter: Tesla.Adapter.Hackney
-
-  The default base URL can also be set as:
-
-      config :docker_engine_api,
-        :base_url, "http://localhost/v1.43"
   """
 
-  @default_base_url Application.compile_env(
-                      :docker_engine_api,
-                      :base_url,
-                      "http://localhost/v1.43"
-                    )
-
+  @default_options [
+    base_url: "http://localhost/v1.43",
+    adapter: Tesla.Adapter.Hackney
+  ]
 
   @typedoc """
   The list of options that can be passed to new/1.
@@ -40,18 +27,6 @@ defmodule DockerEngineAPI.Connection do
   defdelegate request(client, options), to: Tesla
 
   @doc """
-  Configure a client with no authentication.
-
-  ### Returns
-
-  Tesla.Env.client
-  """
-  @spec new() :: Tesla.Env.client()
-  def new do
-    Tesla.client(middleware(), adapter(adapter: Tesla.Adapter.Hackney))
-  end
-
-  @doc """
   Configure a client that may have authentication.
 
   ### Parameters
@@ -64,8 +39,10 @@ defmodule DockerEngineAPI.Connection do
   """
   @spec new(options) :: Tesla.Env.client()
 
-  def new(options) when is_list(options) do
+  def new(options \\ []) when is_list(options) do
+    options = @default_options |> Keyword.merge(options)
     options
+    |> Keyword.merge(options)
     |> middleware()
     |> Tesla.client(adapter(options))
   end
@@ -78,12 +55,7 @@ defmodule DockerEngineAPI.Connection do
   """
   @spec middleware(options) :: [Tesla.Client.middleware()]
   def middleware(options \\ []) do
-    base_url =
-      Keyword.get(
-        options,
-        :base_url,
-        Application.get_env(:docker_engine_api, :base_url, @default_base_url)
-      )
+    base_url = Keyword.get(options, :base_url)
 
     tesla_options = get_tesla_options()
     middleware = Keyword.get(tesla_options, :middleware, [])
