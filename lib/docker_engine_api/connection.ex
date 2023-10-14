@@ -19,7 +19,7 @@ defmodule DockerEngineAPI.Connection do
   """
   @type options :: [
           {:base_url, String.t()},
-          {:user_agent, String.t()},
+          {:user_agent, String.t()}
         ]
 
   @doc "Forward requests to Tesla."
@@ -41,14 +41,12 @@ defmodule DockerEngineAPI.Connection do
 
   def new(options \\ []) when is_list(options) do
     options = @default_options |> Keyword.merge(options)
+
     options
     |> Keyword.merge(options)
     |> middleware()
     |> Tesla.client(adapter(options))
   end
-
-
-
 
   @doc """
   Returns fully configured middleware for passing to Tesla.client/2.
@@ -56,7 +54,6 @@ defmodule DockerEngineAPI.Connection do
   @spec middleware(options) :: [Tesla.Client.middleware()]
   def middleware(options \\ []) do
     base_url = Keyword.get(options, :base_url)
-    timeout = Keyword.get(options, :timeout, 1_000)
 
     tesla_options = get_tesla_options()
     middleware = Keyword.get(tesla_options, :middleware, [])
@@ -74,7 +71,6 @@ defmodule DockerEngineAPI.Connection do
       )
 
     [
-      {Tesla.Middleware.Timeout, [timeout: timeout]},
       {Tesla.Middleware.BaseUrl, base_url},
       {Tesla.Middleware.Headers, [{"user-agent", user_agent}]},
       {Tesla.Middleware.EncodeJson, engine: json_engine}
@@ -82,17 +78,22 @@ defmodule DockerEngineAPI.Connection do
     ]
   end
 
-
   def get_tesla_options, do: Application.get_env(:tesla, __MODULE__, [])
 
   @doc """
   Returns the default adapter for this API.
   """
   def adapter(options \\ []) do
-    Keyword.get(
-      options,
-      :adapter,
-      get_tesla_options() |> Keyword.get(:adapter, nil)
-    )
+    case Keyword.get(
+           options,
+           :adapter,
+           get_tesla_options() |> Keyword.get(:adapter, nil)
+         ) do
+      Tesla.Adapter.Hackney ->
+        {Tesla.Adapter.Hackney, [recv_timeout: Keyword.get(options, :timeout, 1_000)]}
+
+      other ->
+        other
+    end
   end
 end
