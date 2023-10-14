@@ -87,10 +87,10 @@ defmodule DockerEngineAPI.Connection do
     case Keyword.get(
            options,
            :adapter,
-           get_tesla_options() |> Keyword.get(:adapter, nil)
+           Keyword.get(get_tesla_options(), :adapter, nil)
          ) do
       Tesla.Adapter.Hackney ->
-        {Tesla.Adapter.Hackney, [recv_timeout: Keyword.get(options, :timeout, 1_000)]}
+        {Tesla.Adapter.Hackney, [recv_timeout: Keyword.get(options, :recv_timeout, 1_000)]}
 
       other ->
         other
