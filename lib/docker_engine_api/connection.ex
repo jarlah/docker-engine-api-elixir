@@ -56,6 +56,7 @@ defmodule DockerEngineAPI.Connection do
   @spec middleware(options) :: [Tesla.Client.middleware()]
   def middleware(options \\ []) do
     base_url = Keyword.get(options, :base_url)
+    timeout = Keyword.get(options, :timeout)
 
     tesla_options = get_tesla_options()
     middleware = Keyword.get(tesla_options, :middleware, [])
@@ -75,6 +76,7 @@ defmodule DockerEngineAPI.Connection do
 
 
     [
+      {Tesla.Middleware.Timeout, timeout: timeout},
       {Tesla.Middleware.BaseUrl, base_url},
       {Tesla.Middleware.Headers, [{"user-agent", user_agent}]},
       {Tesla.Middleware.EncodeJson, engine: json_engine}
