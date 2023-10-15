@@ -19,11 +19,7 @@ defmodule DockerEngineAPI.Mixfile do
       description: """
       The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.
       """,
-      deps: deps(),
-      package: [
-        links: %{"GitHub" => @source_url},
-        licenses: ["MIT"]
-      ]
+      deps: deps()
     ]
   end
 
@@ -57,7 +53,9 @@ defmodule DockerEngineAPI.Mixfile do
    defp package do
       [
         name: "docker_engine_api",
-        files: ~w(.formatter.exs config lib mix.exs README* LICENSE*),
+        files: ~w(.formatter.exs lib mix.exs README* LICENSE*),
+        links: %{"GitHub" => @source_url},
+        licenses: ["MIT"]
       ]
   end
 end
