@@ -17,7 +17,7 @@ mix do deps.get, compile
 
 ## Installation
 
-If [available in Hex][], the package can be installed by adding `docker_engine_api` to
+If [available in Hex][], the package can be installed by adding `ex_docker_engine_api` to
 your list of dependencies in `mix.exs`:
 
 ```elixir
