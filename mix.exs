@@ -17,11 +17,13 @@ defmodule DockerEngineAPI.Mixfile do
       start_permanent: Mix.env() == :prod,
       package: package(),
       description: """
-      The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client&#39;s commands map directly to API endpoints (e.g. &#x60;docker ps&#x60; is &#x60;GET /containers/json&#x60;). The notable exception is running containers, which consists of several API calls. See README for more.
+      The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.
       """,
       deps: deps(),
-      links: %{"GitHub" => @source_url},
-      licenses: ["MIT"]
+      package: [
+        links: %{"GitHub" => @source_url},
+        licenses: ["MIT"]
+      ]
     ]
   end
 
