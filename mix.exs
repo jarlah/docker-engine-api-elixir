@@ -52,7 +52,7 @@ defmodule DockerEngineAPI.Mixfile do
 
    defp package do
       [
-        name: "docker_engine_api",
+        name: "#{@app}",
         files: ~w(.formatter.exs lib mix.exs README* LICENSE*),
         links: %{"GitHub" => @source_url},
         licenses: ["MIT"]
