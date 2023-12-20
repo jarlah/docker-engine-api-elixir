@@ -12,7 +12,7 @@ defmodule DockerEngineAPI.Mixfile do
       version: @version,
       source_url: @source_url,
       homepage_url: @source_url,
-      elixir: "~> 1.15",
+      elixir: "~> 1.13",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       package: package(),
